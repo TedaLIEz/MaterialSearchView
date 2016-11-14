@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private List<SearchHistory> mHistory;
     private HistoryDbHelper dbHelper;
     private OnItemClickListener mOnItemClickListener;
+    private OnItemClearListener mOnItemClearListener;
 
     public SearchAdapter(Context context) {
         mContext = context;
@@ -82,7 +84,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final SearchAdapter.ViewHolder holder, int position) {
         holder.mSuggestion.setText(mSuggestions.get(position).keywords);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.mSuggestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
@@ -90,7 +92,26 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 }
             }
         });
+        holder.mClearImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnItemClearListener != null) {
+                    mOnItemClearListener.onClear(mSuggestions.get(holder.getAdapterPosition()).keywords);
+                }
+                removeItem(holder.getAdapterPosition());
+            }
+        });
     }
+
+    private void removeItem(int position) {
+        SearchHistory history = mSuggestions.get(position);
+        dbHelper.delete(history);
+        mSuggestions.remove(history);
+        mHistory.remove(history);
+        notifyItemRemoved(position);
+    }
+
+
 
     @Override
     public int getItemCount() {
@@ -137,12 +158,21 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         }
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
     }
 
+    void setOnItemClearListener(OnItemClearListener onItemClearListener) {
+        mOnItemClearListener = onItemClearListener;
+    }
+
+
     public interface OnItemClickListener {
         void onItemClick(View view, String text);
+    }
+
+    public interface OnItemClearListener {
+        void onClear(String text);
     }
 
     private void clearAndAddAll(List<SearchHistory> data) {
@@ -153,10 +183,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView mSuggestion;
-
+        ImageView mClearImageView;
         public ViewHolder(View itemView) {
             super(itemView);
             mSuggestion = (TextView) itemView.findViewById(R.id.textView_suggestion);
+            mClearImageView = (ImageView) itemView.findViewById(R.id.imageView_clear);
         }
 
     }

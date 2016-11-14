@@ -62,7 +62,6 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
     private Context mContext;
     private MenuItem mMenuItem;
     private int mAnimationDuration = SearchViewAnimator.DEFAULT_DURATION;
-    private int LAYOUT_TRANSITION_DURATION = 300;
     private boolean mSearchOpen = false;
     private int mInitHeight;
     private int mInitWidth;
@@ -333,6 +332,10 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
         mOldQueryText = newText.toString();
     }
 
+
+    public void setOnSuggestionClearListener(SearchAdapter.OnItemClearListener onSuggestionClearListener) {
+        mAdapter.setOnItemClearListener(onSuggestionClearListener);
+    }
 
     public void setMenuItem(MenuItem item) {
         mMenuItem = item;

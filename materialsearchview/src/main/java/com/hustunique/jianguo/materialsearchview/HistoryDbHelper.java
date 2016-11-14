@@ -77,7 +77,7 @@ public class HistoryDbHelper {
     public void delete(SearchHistory history) {
         long id = history._id;
         open();
-        db.delete(SearchHistoryDb.SEARCH_HISTORY_TABLE, SearchHistoryDb.SEARCH_HISTORY_COLUMN_ID, new String[] {id + ""});
+        db.delete(SearchHistoryDb.SEARCH_HISTORY_TABLE, SearchHistoryDb.SEARCH_HISTORY_COLUMN_ID + "=?", new String[] {id + ""});
         close();
     }
 
