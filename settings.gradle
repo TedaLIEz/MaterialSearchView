@@ -1,1 +1,1 @@
-include ':sample', ':mysearchview'
+include ':sample', ':materialsearchview'
