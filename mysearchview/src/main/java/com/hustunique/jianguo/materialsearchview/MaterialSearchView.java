@@ -254,7 +254,7 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
         mSuggestions.setNestedScrollingEnabled(false);
         mSuggestions.setLayoutManager(new LinearLayoutManager(mContext));
         mSuggestions.setItemAnimator(null);
-        mSuggestions.addItemDecoration(new SearchViewDivider(mContext));
+//        mSuggestions.addItemDecoration(new SearchViewDivider(mContext));
         mSuggestions.setAdapter(mAdapter);
     }
 
@@ -496,7 +496,7 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
             setQuery(ss.query, false);
             mInputEditText.requestFocus();
         }
-        super.onRestoreInstanceState(state);
+        super.onRestoreInstanceState(ss.getSuperState());
         requestLayout();
     }
 
