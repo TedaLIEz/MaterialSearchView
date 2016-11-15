@@ -6,6 +6,14 @@
 
 <img src="art/screenshots/searchview_2.png" alt="view_2" width="360" height="640"/>
 
+## Download
+[![Download](https://api.bintray.com/packages/tedaliez/maven/com.hustunique.jianguo:materialsearchview/images/download.svg)](https://bintray.com/tedaliez/maven/com.hustunique.jianguo:materialsearchview/_latestVersion)
+
+In your module
+```
+compile 'com.hustunique:materialsearchview:1.0.0'
+```
+
 ## Usage
 
     @Override
