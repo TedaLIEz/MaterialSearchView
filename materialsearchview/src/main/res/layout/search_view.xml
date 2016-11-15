@@ -68,6 +68,14 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/imageView_voice_search"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/searchView_image_margin"
+                android:layout_marginEnd="@dimen/searchView_image_margin"
+                android:background="@drawable/ic_keyboard_voice_grey_500_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <ImageView
                 android:id="@+id/imageView_clear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -75,8 +83,7 @@
                 android:background="@drawable/ic_close_grey_500_24dp"
                 android:layout_marginStart="@dimen/searchView_image_margin"
                 android:layout_marginEnd="@dimen/searchView_image_margin"
-                android:visibility="gone"
-                tools:visibility="visible" />
+                android:visibility="gone"/>
         </LinearLayout>
 
     </LinearLayout>

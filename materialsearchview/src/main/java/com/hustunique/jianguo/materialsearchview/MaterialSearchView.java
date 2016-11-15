@@ -17,7 +17,9 @@
 package com.hustunique.jianguo.materialsearchview;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -25,6 +27,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.speech.RecognizerIntent;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
@@ -60,6 +63,7 @@ import android.widget.TextView;
 // TODO: 11/8/16 Change Layout to material design spec
 // TODO: 11/9/16 Refactoring code
 public class MaterialSearchView extends FrameLayout implements View.OnClickListener {
+    private static final int REQUEST_VOICE = 0x00000;
     private Context mContext;
     private MenuItem mMenuItem;
     private int mAnimationDuration = SearchViewAnimator.DEFAULT_DURATION;
@@ -92,11 +96,12 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
     RecyclerView mSuggestions;
     EditText mInputEditText;
     LinearLayout mSearchLayout;
-
     LinearLayout mPopupLayout;
+    ImageView mVoiceImageView;
+
     private OnTextQueryListener mOnQueryListener;
     private OnOpenCloseListener mOnOpenCloseListener;
-
+    private OnVoiceSubmitListener mOnVoiceSubmitListener;
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -114,6 +119,10 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
         public void afterTextChanged(Editable s) {
         }
     };
+
+    public interface OnVoiceSubmitListener {
+        void onVoiceSubmit(Intent intent);
+    }
 
     public interface OnTextQueryListener {
         boolean onQueryTextSubmit(CharSequence query);
@@ -223,13 +232,17 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
         mBackImageView = (ImageView) findViewById(R.id.imageView_arrow_back);
         mClearImageView = (ImageView) findViewById(R.id.imageView_clear);
         mInputEditText = (EditText) findViewById(R.id.editText_input);
-
+        mVoiceImageView = (ImageView) findViewById(R.id.imageView_voice_search);
         mClearImageView.setOnClickListener(this);
         mBackImageView.setOnClickListener(this);
         initPopupView();
-
+        initSearch();
         initSearchLayout();
         initInput();
+    }
+
+    private void initSearch() {
+        mVoiceImageView.setOnClickListener(this);
     }
 
     private void initSearchLayout() {
@@ -337,6 +350,7 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
 
     private void handleChangedText(CharSequence newText) {
         mClearImageView.setVisibility(TextUtils.isEmpty(newText) ? View.GONE : View.VISIBLE);
+        mVoiceImageView.setVisibility(TextUtils.isEmpty(newText) ? View.VISIBLE : View.GONE);
         CharSequence text = mInputEditText.getText();
         mUserQuery = text.toString();
         if (mAdapter != null) {
@@ -377,6 +391,10 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
         mOnQueryListener = onTextQueryListener;
     }
 
+    public void setOnVoiceSubmitListener(@Nullable OnVoiceSubmitListener onVoiceSubmitListener) {
+        mOnVoiceSubmitListener = onVoiceSubmitListener;
+    }
+
     private void open() {
         open(true);
     }
@@ -401,6 +419,7 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
         } else {
             mSearchLayout.setVisibility(View.VISIBLE);
         }
+        mVoiceImageView.setVisibility(View.VISIBLE);
         showKeyboard();
         mSearchOpen = true;
     }
@@ -474,6 +493,7 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
         } else {
             mSearchLayout.setVisibility(View.GONE);
         }
+        mVoiceImageView.setVisibility(View.GONE);
         mInputEditText.clearFocus();
         hideSuggestions();
         hideKeyboard();
@@ -507,6 +527,18 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
         } else if (v == mPopupLayout) {
             hideSuggestions();
             hideKeyboard();
+        } else if (v == mVoiceImageView) {
+            onVoiceClicked();
+        }
+    }
+
+    private void onVoiceClicked() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+        if (mOnVoiceSubmitListener != null) {
+            mOnVoiceSubmitListener.onVoiceSubmit(intent);
         }
     }
 
