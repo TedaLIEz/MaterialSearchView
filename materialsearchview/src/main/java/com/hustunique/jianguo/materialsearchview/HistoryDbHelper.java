@@ -30,12 +30,12 @@ import java.util.List;
  * Created by JianGuo on 11/8/16.
  * Db Helper for {@link SearchHistoryDb}
  */
-public class HistoryDbHelper {
+class HistoryDbHelper {
     private final SearchHistoryDb mHistoryDb;
     private SQLiteDatabase db;
     private static HistoryDbHelper dbHelper;
-
-    public static HistoryDbHelper getInstance(Context context) {
+    private static final String TAG = "HistoryDbHelper";
+    static HistoryDbHelper getInstance(Context context) {
         if (dbHelper == null) {
             dbHelper = new HistoryDbHelper(context);
         }
@@ -70,14 +70,15 @@ public class HistoryDbHelper {
         String[] selectionArgs = {String.valueOf(id)};
         open();
         int rows = db.update(SearchHistoryDb.SEARCH_HISTORY_TABLE, values, selection, selectionArgs);
-        Log.i("HistoryDbHelper", "update data rows: " + rows);
+        Log.i(TAG, "update data rows: " + rows);
         close();
     }
 
-    public void delete(SearchHistory history) {
+    void delete(SearchHistory history) {
         long id = history._id;
         open();
-        db.delete(SearchHistoryDb.SEARCH_HISTORY_TABLE, SearchHistoryDb.SEARCH_HISTORY_COLUMN_ID + "=?", new String[] {id + ""});
+        int rst = db.delete(SearchHistoryDb.SEARCH_HISTORY_TABLE, SearchHistoryDb.SEARCH_HISTORY_COLUMN_ID + "=?", new String[] {Long.toString(id)});
+        Log.i(TAG, "delete data rows: " + rst);
         close();
     }
 
@@ -87,7 +88,7 @@ public class HistoryDbHelper {
         contentValues.put(SearchHistoryDb.SEARCH_HISTORY_COLUMN_TIMES, history.searchTimes);
         open();
         history._id = db.insert(SearchHistoryDb.SEARCH_HISTORY_TABLE, null, contentValues);
-        Log.i("HistoryDbHelper", "insert data status: " + history._id);
+        Log.i(TAG, "insert data status: " + history._id);
         close();
     }
 
@@ -111,17 +112,17 @@ public class HistoryDbHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
-                SearchHistory history = new SearchHistory(cursor.getString(1), cursor.getInt(2));
+                SearchHistory history = new SearchHistory(cursor.getString(1), cursor.getInt(2), cursor.getLong(0));
                 list.add(history);
             } while (cursor.moveToNext());
         }
         cursor.close();
         close();
-        Log.i("HistoryDbHelper", "find all data size " + list.size());
+        Log.i(TAG, "find all data size " + list.size());
         return list;
     }
 
-    public void clearDatabase() {
+    void clearDatabase() {
         open();
         db.delete(SearchHistoryDb.SEARCH_HISTORY_TABLE, null, null);
         close();

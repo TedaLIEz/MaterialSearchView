@@ -44,7 +44,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private OnItemClickListener mOnItemClickListener;
     private OnItemClearListener mOnItemClearListener;
 
-    public SearchAdapter(Context context) {
+    SearchAdapter(Context context) {
         mContext = context;
         dbHelper = HistoryDbHelper.getInstance(context);
         initData();
@@ -62,7 +62,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     }
 
 
-    public void addItem(SearchHistory item) {
+    void addItem(SearchHistory item) {
         dbHelper.addItem(item);
         if (mSuggestions.contains(item)) {
             mHistory.get(mHistory.indexOf(item)).incrementAndGet();
@@ -181,14 +181,21 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView mSuggestion;
         ImageView mClearImageView;
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             mSuggestion = (TextView) itemView.findViewById(R.id.textView_suggestion);
             mClearImageView = (ImageView) itemView.findViewById(R.id.imageView_clear);
         }
 
+    }
+
+    void clearSuggestions() {
+        dbHelper.clearDatabase();
+        mSuggestions.clear();
+        mHistory.clear();
+        notifyDataSetChanged();
     }
 }

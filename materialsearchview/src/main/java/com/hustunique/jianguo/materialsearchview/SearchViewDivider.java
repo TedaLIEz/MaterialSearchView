@@ -26,6 +26,7 @@ import android.view.View;
 
 /**
  * Created by JianGuo on 11/8/16.
+ * Divider for items in suggestions list.
  */
 public class SearchViewDivider extends RecyclerView.ItemDecoration {
     private Drawable divider;

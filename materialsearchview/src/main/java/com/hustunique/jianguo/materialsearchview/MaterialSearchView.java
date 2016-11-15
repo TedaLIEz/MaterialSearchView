@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -170,25 +171,37 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
     }
 
 
-    private void setTextColor(@ColorInt int color) {
+    /**
+     * Change color of input textView
+     * @param color the text color
+     */
+    public void setTextColor(@ColorInt int color) {
         mTextColor = color;
 
     }
 
     private void setTextStyle(int style) {
         mTextStyle = style;
-
     }
 
-    private void setSearchBackgroundColor(@ColorInt int color) {
+    /**
+     * Set the background ground color of whole searchView, suggestions list excluded.
+     * @param color the background color
+     */
+    public void setSearchBackgroundColor(@ColorInt int color) {
         mBackgroundColor = color;
 
     }
 
-    private void setHintColor(@ColorInt int color) {
+    /**
+     * Set the hint color
+     * @param color the hint color
+     */
+    public void setHintColor(@ColorInt int color) {
         mHintColor = color;
 
     }
+
 
     private void setTextSize(float size) {
         float scaleRatio = mContext.getResources().getDisplayMetrics().density;
@@ -196,7 +209,11 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
 
     }
 
-    private void setHint(String string) {
+    /**
+     * Set the hint
+     * @param string the hint text
+     */
+    public void setHint(String string) {
         mHint = string == null ? "" : string;
     }
 
@@ -333,6 +350,10 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
     }
 
 
+    /**
+     * Listener for after user delete the item in the suggestions list
+     * @param onSuggestionClearListener
+     */
     public void setOnSuggestionClearListener(SearchAdapter.OnItemClearListener onSuggestionClearListener) {
         mAdapter.setOnItemClearListener(onSuggestionClearListener);
     }
@@ -361,6 +382,10 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
     }
 
 
+    /**
+     * Open the searchView programatically
+     * @param animated <tt>true</tt> if open with animation, <tt>false</tt> otherwise.
+     */
     public void open(boolean animated) {
         if (isSearchOpen()) {
             return;
@@ -390,6 +415,10 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
         if (mAdapter != null) {
             mPopWindow.dismiss();
         }
+    }
+
+    public void clearSuggestions() {
+        mAdapter.clearSuggestions();
     }
 
     private void fadeOpen() {
@@ -431,6 +460,10 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
     }
 
 
+    /**
+     * Open the searchView programatically
+     * @param animated <tt>true</tt> if close with animation, <tt>false</tt> otherwise
+     */
     public void close(boolean animated) {
         if (animated) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -451,6 +484,10 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
         return mSearchOpen;
     }
 
+    /**
+     * Set the duration time of open and close animation.
+     * @param duration
+     */
     public void setAnimationDuration(@IntRange(from = 0) int duration) {
         mAnimationDuration = duration;
     }

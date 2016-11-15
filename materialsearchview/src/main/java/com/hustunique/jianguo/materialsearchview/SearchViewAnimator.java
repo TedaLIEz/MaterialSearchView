@@ -35,8 +35,8 @@ import android.widget.EditText;
  * Animator Util for {@Link com.hustunique.jianguo.mysearchview.MaterialSearchView}
  */
 
-public class SearchViewAnimator {
-    public static final int DEFAULT_DURATION = 300;
+class SearchViewAnimator {
+    static final int DEFAULT_DURATION = 300;
 
     static void fadeIn(View view, int duration) {
         Animation anim = new AlphaAnimation(0.0f, 1.0f);
@@ -115,7 +115,7 @@ public class SearchViewAnimator {
         int cx = SearchViewUtil.getRightX(view);
         if (cx <= 0) {
             int padding = context.getResources().getDimensionPixelSize(R.dimen.search_reveal);
-            if (SearchViewUtils.isRtlLayout(context))
+            if (SearchViewUtil.isRtlLayout(context))
                 cx = padding;
             else
                 cx = view.getWidth() - padding;

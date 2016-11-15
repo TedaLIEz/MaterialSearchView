@@ -37,6 +37,12 @@ public class SearchHistory implements Comparable<SearchHistory> {
         this._id = -1;
     }
 
+    public SearchHistory(String keywords, int searchTimes, long id) {
+        this.keywords = keywords;
+        this.searchTimes = searchTimes;
+        this._id = id;
+    }
+
     public int incrementAndGet() {
         searchTimes++;
         return searchTimes;

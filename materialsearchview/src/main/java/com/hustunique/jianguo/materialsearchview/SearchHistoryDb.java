@@ -24,7 +24,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by JianGuo on 11/8/16.
  * Database table for {@link SearchHistory}
  */
-public class SearchHistoryDb extends SQLiteOpenHelper {
+class SearchHistoryDb extends SQLiteOpenHelper {
     static final String SEARCH_HISTORY_TABLE = "search_history";
     static final String SEARCH_HISTORY_COLUMN_ID = "_id";
     static final String SEARCH_HISTORY_COLUMN_TEXT = "_text";
@@ -38,7 +38,7 @@ public class SearchHistoryDb extends SQLiteOpenHelper {
             + SEARCH_HISTORY_COLUMN_TEXT + " TEXT, "
             + SEARCH_HISTORY_COLUMN_TIMES + " INTEGER " + ");";
 
-    public SearchHistoryDb(Context context) {
+    SearchHistoryDb(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
