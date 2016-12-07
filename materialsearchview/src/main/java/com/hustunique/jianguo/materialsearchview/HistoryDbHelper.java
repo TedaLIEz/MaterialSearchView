@@ -30,9 +30,9 @@ import java.util.List;
  * Created by JianGuo on 11/8/16.
  * Db Helper for {@link SearchHistoryDb}
  */
-class HistoryDbHelper {
-    private final SearchHistoryDb mHistoryDb;
-    private SQLiteDatabase db;
+public class HistoryDbHelper {
+    private static SearchHistoryDb mHistoryDb;
+    private static SQLiteDatabase db;
     private static HistoryDbHelper dbHelper;
     private static final String TAG = "HistoryDbHelper";
     static HistoryDbHelper getInstance(Context context) {
@@ -46,11 +46,11 @@ class HistoryDbHelper {
         mHistoryDb = new SearchHistoryDb(context);
     }
 
-    private void open() {
+    private static void open() {
         db = mHistoryDb.getWritableDatabase();
     }
 
-    private void close() {
+    private static void close() {
         db.close();
     }
 
@@ -122,7 +122,7 @@ class HistoryDbHelper {
         return list;
     }
 
-    void clearDatabase() {
+    public static void clearDatabase() {
         open();
         db.delete(SearchHistoryDb.SEARCH_HISTORY_TABLE, null, null);
         close();

@@ -17,13 +17,11 @@
 package com.hustunique.jianguo.materialsearchview;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -209,6 +207,10 @@ public class MaterialSearchView extends FrameLayout implements View.OnClickListe
     public void setHintColor(@ColorInt int color) {
         mHintColor = color;
 
+    }
+
+    public void enableVoiceSearch(boolean enabled) {
+        mVoiceImageView.setVisibility(enabled ? View.VISIBLE : View.GONE);
     }
 
 
